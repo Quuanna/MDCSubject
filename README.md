@@ -1,7 +1,7 @@
 # MDCSubject
 Material Design 3 Component
 
-# MDC Components的Button和Text Field，實作「登錄頁面」
+# 壹. MDC Components的Button和Text Field，實作「登錄頁面」
 ![KLcxwen](https://user-images.githubusercontent.com/36694083/191690504-f61354dc-b1a5-4eaa-ad6f-6297369061bc.gif)
 
 ## 使用 MDC Android Components
