@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MDCSubject</string>
+    <string name="login_title">登入頁面</string>
+    <string name="login_hint_username">Username</string>
+    <string name="login_hint_password">Password</string>
+    <string name="button_text_login">登入</string>
+</resources>
