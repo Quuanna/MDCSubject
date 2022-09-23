@@ -2,6 +2,7 @@ package com.anna.mdcsubject.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -18,6 +19,10 @@ class ProductCardsFragment : Fragment() {
 
     private var _binding: FragmentProductCardsBinding? = null
     private val binding get() = _binding
+    private val defaultDataList = arrayListOf(1, 2, 3, 4, 5, 6, 7, 8)
+    private var favoriteDataList = arrayListOf<Int>()
+    private val menuItemClick = OnMenuItemClick()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,6 +37,7 @@ class ProductCardsFragment : Fragment() {
 
         initToolbar()
         initView()
+
     }
 
     private fun initToolbar() {
@@ -55,33 +61,87 @@ class ProductCardsFragment : Fragment() {
     }
 
     private fun initView() {
-        binding?.recyclerView?.adapter = CardRecyclerViewAdapter(listOf(1, 2, 3, 4, 5, 6, 7, 8),CardsType.CARDS ,itemClickListener()) //2, 3, 4, 5, 6, 7, 8
-        binding?.recyclerView?.layoutManager =
-            GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+        setRecycleViewLayout(defaultDataList, CardsType.GRID)
+        binding?.bottomAppBar?.setOnMenuItemClickListener(menuItemClick)
 
         binding?.toggleButton?.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
-                    R.id.btn_grid -> {
-                        binding?.recyclerView?.adapter = CardRecyclerViewAdapter(listOf(1,2, 3, 4, 5, 6, 7, 8),CardsType.CARDS , itemClickListener())
-                        binding?.recyclerView?.layoutManager =
-                            GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
-                    }
-                    R.id.btn_vertical -> {
-                        binding?.recyclerView?.adapter = CardRecyclerViewAdapter(listOf(1,2, 3, 4, 5, 6, 7, 8),CardsType.VERTICAL , itemClickListener())
-                        binding?.recyclerView?.layoutManager =
-                            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                    }
+                    R.id.btn_grid -> setRecycleViewLayout(defaultDataList, CardsType.GRID)
+                    R.id.btn_vertical -> setRecycleViewLayout(defaultDataList, CardsType.VERTICAL)
                 }
             }
         }
     }
 
-    private fun itemClickListener(): ((position: Int) -> Unit) {
-        return { position ->
+    private fun setRecycleViewLayout(dataList: List<Int>, type: CardsType, isFavorite: Boolean? = false) {
+        binding?.recyclerView?.adapter = CardRecyclerViewAdapter(
+            dataList,
+            favoriteDataList,
+            type,
+            isFavorite,
+            setOnItemClickListener()
+        )
 
-            Toast.makeText(context,"點擊第幾項目 : $position", Toast.LENGTH_SHORT).show()
+        when (type) {
+            CardsType.GRID -> binding?.recyclerView?.layoutManager =
+                GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+            CardsType.VERTICAL -> binding?.recyclerView?.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
+    }
+
+    private fun setOnItemClickListener(): ((position: Int, isFavorite: Boolean?) -> Unit) {
+        return { position, isFavorite ->
+            Toast.makeText(context, "點擊第幾項目 : ${position+1}", Toast.LENGTH_SHORT).show()
+            if (isFavorite != null && isFavorite == true) {
+                // 收藏卡片
+                favoriteDataList.add(position+1)
+            } else if (isFavorite != null && isFavorite == false){
+                favoriteDataList.remove(position+1)
+            }
+        }
+    }
+
+    private inner class OnMenuItemClick : androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
+        override fun onMenuItemClick(item: MenuItem?): Boolean {
+            return when (item?.itemId) {
+                R.id.mainPage -> {
+                    binding?.toggleButton?.visibility = View.VISIBLE
+
+                    if (isCheckGridView()) {
+                        setRecycleViewLayout(defaultDataList, CardsType.GRID)
+                    } else {
+                        setRecycleViewLayout(defaultDataList, CardsType.VERTICAL)
+                    }
+                    true
+                }
+                R.id.collect -> {
+                    if (favoriteDataList.size != 0) {
+                        binding?.toggleButton?.visibility = View.GONE
+
+                        if (isCheckGridView()) {
+                            setRecycleViewLayout(favoriteDataList, CardsType.GRID, true)
+                        } else {
+                            setRecycleViewLayout(favoriteDataList, CardsType.VERTICAL, true)
+                        }
+                        true
+
+                    } else {
+                        Toast.makeText(context, "沒有加入「我的最愛」的卡片", Toast.LENGTH_SHORT).show()
+                        false
+                    }
+                }
+                R.id.user -> {
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun isCheckGridView(): Boolean {
+       return binding?.toggleButton?.checkedButtonId == R.id.btn_grid
     }
 
 
@@ -89,5 +149,8 @@ class ProductCardsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
+
 

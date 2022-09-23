@@ -10,23 +10,30 @@ import com.anna.mdcsubject.ui.adapter.viewHolder.GridViewHolder
 
 class CardRecyclerViewAdapter(
     private val productList: List<Int>,
+    private val favoriteDataList: ArrayList<Int>,
     private val type: CardsType,
-    private var mItemButtonClickListener: ((position: Int) -> Unit)? = null
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val isFavorite: Boolean?,
+    private var mItemButtonClickListener: ((position: Int, isFavorite: Boolean?) -> Unit)? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
-            CardsType.CARDS -> {
+            CardsType.GRID -> {
                 GridViewHolder(
                     ItemCardsGridBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                    productList,
+                    favoriteDataList,
+                    isFavorite,
                     mItemButtonClickListener
                 )
             }
             CardsType.VERTICAL -> {
                 GridViewHolder(
                     ItemCardsVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                    productList,
+                    favoriteDataList,
+                    isFavorite,
                     mItemButtonClickListener
                 )
             }
@@ -36,7 +43,7 @@ class CardRecyclerViewAdapter(
     override fun getItemCount(): Int = productList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as GridViewHolder).bind(position)
+        (holder as GridViewHolder).bind()
     }
 
 }
