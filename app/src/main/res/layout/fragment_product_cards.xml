@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.ProductCardsFragment">
@@ -11,10 +12,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/purple_200">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_app_bar"
@@ -25,55 +23,73 @@
             app:title="Title" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--Toggle Button：Single-select-->
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggle_button"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="?actionBarSize"
+        android:orientation="vertical">
+
+        <!--Toggle Button：Single-select-->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            app:checkedButton="@+id/btn_grid"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_grid"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="網格" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_vertical"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="垂直" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:itemCount="6"
+                tools:listitem="@layout/item_cards_grid" />
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.Material3.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hideOnScroll="true"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_app_bar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:checkedButton="@+id/btn_grid"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
-        app:selectionRequired="true"
-        app:singleSelection="true">
+        app:layout_anchor="@id/bottomAppBar"
+        app:srcCompat="@drawable/ic_add" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_grid"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="網格" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_vertical"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="垂直" />
-
-    </com.google.android.material.button.MaterialButtonToggleGroup>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="5dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toggle_button">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
-            tools:itemCount="6"
-            tools:listitem="@layout/item_cards_grid" />
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
