@@ -3,6 +3,7 @@ package com.anna.mdcsubject.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.anna.mdcsubject.CardsType
 import com.anna.mdcsubject.databinding.ItemCardsGridBinding
 import com.anna.mdcsubject.databinding.ItemCardsVerticalBinding
@@ -20,25 +21,21 @@ class CardRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
             CardsType.GRID -> {
-                GridViewHolder(
-                    ItemCardsGridBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-                    productList,
-                    favoriteDataList,
-                    isFavorite,
-                    mItemButtonClickListener
-                )
+                setCardsViewHolder(ItemCardsGridBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
             CardsType.VERTICAL -> {
-                GridViewHolder(
-                    ItemCardsVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-                    productList,
-                    favoriteDataList,
-                    isFavorite,
-                    mItemButtonClickListener
-                )
+                setCardsViewHolder(ItemCardsVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
         }
     }
+
+    private fun setCardsViewHolder(binding: ViewBinding) = GridViewHolder(
+        binding,
+        productList,
+        favoriteDataList,
+        isFavorite,
+        mItemButtonClickListener
+    )
 
     override fun getItemCount(): Int = productList.size
 

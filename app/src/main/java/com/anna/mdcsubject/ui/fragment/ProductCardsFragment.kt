@@ -64,6 +64,18 @@ class ProductCardsFragment : Fragment() {
         setRecycleViewLayout(defaultDataList, CardsType.GRID)
         binding?.bottomAppBar?.setOnMenuItemClickListener(menuItemClick)
 
+
+        binding?.fab?.setOnClickListener {
+            // 新增Cards
+            if (isCheckGridView()) {
+                defaultDataList.add(9)
+                setRecycleViewLayout(defaultDataList, CardsType.GRID)
+            } else {
+                defaultDataList.add(9)
+                setRecycleViewLayout(defaultDataList, CardsType.VERTICAL)
+            }
+        }
+
         binding?.toggleButton?.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
@@ -108,7 +120,6 @@ class ProductCardsFragment : Fragment() {
             return when (item?.itemId) {
                 R.id.mainPage -> {
                     binding?.toggleButton?.visibility = View.VISIBLE
-
                     if (isCheckGridView()) {
                         setRecycleViewLayout(defaultDataList, CardsType.GRID)
                     } else {
@@ -132,18 +143,15 @@ class ProductCardsFragment : Fragment() {
                         false
                     }
                 }
-                R.id.user -> {
-                    true
-                }
                 else -> false
             }
         }
     }
 
+    // 判斷toggleButton目前切換的卡片類型
     private fun isCheckGridView(): Boolean {
        return binding?.toggleButton?.checkedButtonId == R.id.btn_grid
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -15,11 +15,4 @@
         android:title="收藏"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/user"
-        android:icon="@drawable/ic_account"
-        android:title="會員中心"
-        app:showAsAction="ifRoom" />
-
-
 </menu>
