@@ -12,5 +12,16 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/purple_200</item>
         <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
     </style>
+
+    <style name="ModalBottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="behavior_draggable">false</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheet</item>
+    </style>
+
 </resources>

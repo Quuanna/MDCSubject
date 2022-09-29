@@ -14,6 +14,8 @@ import com.anna.mdcsubject.ui.adapter.CardRecyclerViewAdapter
 import com.anna.mdcsubject.CardsType
 import com.anna.mdcsubject.R
 import com.anna.mdcsubject.databinding.FragmentProductCardsBinding
+import com.anna.mdcsubject.ui.bottomSheet.ModalBottomSheet
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ProductCardsFragment : Fragment() {
 
@@ -35,12 +37,12 @@ class ProductCardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbar()
         initView()
+        initToolbarClick()
 
     }
 
-    private fun initToolbar() {
+    private fun initToolbarClick() {
         binding?.topAppBar?.setOnMenuItemClickListener { menu ->
             when (menu.itemId) {
                 R.id.search -> {
@@ -48,7 +50,12 @@ class ProductCardsFragment : Fragment() {
                     true
                 }
                 R.id.filter -> {
-                    Toast.makeText(context, "測試 menu item filter", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "開啟Bottom Sheet", Toast.LENGTH_LONG).show()
+                    // 開啟Bottom Sheet
+                    val modalBottomSheet = ModalBottomSheet()
+                    if(context != null) {
+                        modalBottomSheet.show(requireActivity().supportFragmentManager, ModalBottomSheet.TAG)
+                    }
                     true
                 }
                 else -> false
