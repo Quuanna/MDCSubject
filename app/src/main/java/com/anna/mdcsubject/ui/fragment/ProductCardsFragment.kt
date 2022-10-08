@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.anna.mdcsubject.CardsType
 import com.anna.mdcsubject.R
 import com.anna.mdcsubject.databinding.FragmentProductCardsBinding
 import com.anna.mdcsubject.ui.bottomSheet.ModalBottomSheet
+import com.anna.mdcsubject.ui.dialogFragment.FullScreenDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class ProductCardsFragment : Fragment() {
@@ -53,7 +55,7 @@ class ProductCardsFragment : Fragment() {
                     Toast.makeText(context, "開啟Bottom Sheet", Toast.LENGTH_LONG).show()
                     // 開啟Bottom Sheet
                     val modalBottomSheet = ModalBottomSheet()
-                    if(context != null) {
+                    if(activity != null) {
                         modalBottomSheet.show(requireActivity().supportFragmentManager, ModalBottomSheet.TAG)
                     }
                     true
@@ -149,6 +151,15 @@ class ProductCardsFragment : Fragment() {
                         Toast.makeText(context, "沒有加入「我的最愛」的卡片", Toast.LENGTH_SHORT).show()
                         false
                     }
+                }
+                R.id.account -> {
+                    // 使用者資料點擊開啟Full-screen dialogs
+                    if(activity != null) {
+                        requireActivity().supportFragmentManager.let {
+                            FullScreenDialogFragment().show(it, "")
+                        }
+                    }
+                    true
                 }
                 else -> false
             }
