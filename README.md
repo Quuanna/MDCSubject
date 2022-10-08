@@ -3,18 +3,17 @@
 
 
 ## 壹. Day04 實戰登入頁面
-# 使用 MDC Android Components
-![https://ithelp.ithome.com.tw/upload/images/20220917/20144469lVKEWPPvqB.png](https://ithelp.ithome.com.tw/upload/images/20220917/20144469lVKEWPPvqB.png)
+### 使用 MDC Android Components
+- Add input validation 顯示 error提示訊息的邏輯判斷(提供完整程式碼)
+- Add a trailing icon 設定顯示密碼、屏蔽密碼的邏輯
 
 詳細實作 https://ithelp.ithome.com.tw/articles/10292391
 
-![](https://i.imgur.com/ij6URVf.gif)
-
-
+-----
 
 
 ## 貳. Day09 實戰簡易的卡片瀏覽頁面
-# 使用 MDC Android Components
+### 使用 MDC Android Components
 - AppBarLayout (**Top app bars**)
 - MaterialCardView (**Card**)
     - Elevated Card
@@ -25,15 +24,28 @@
 
 詳細實作 https://ithelp.ithome.com.tw/articles/10294627
 
-![](https://i.imgur.com/ng89I2F.png)
+-----
     
 
 ## 參. Day14 延續前實戰新增 FAB + Bottom App Bar 實作
-# 使用 MDC Android Components
+### 使用 MDC Android Components
 - CoordinatorLayout
 - Bottom App Bar
 - Floating Action Button
 
 詳細實作 https://ithelp.ithome.com.tw/articles/10299623
-![](https://i.imgur.com/1bcEoyB.gif)
+
+------
+
+
+
+## 伍. Day19 延續前實戰新增Material Design Component
+實現Day15~Day18文章介紹MDC Components的 Bottom sheets、Dialogs、Divider、Menus的實作
+### 使用 MDC Android Components
+- Add Bottom Sheets、Divider
+- Add Full-screen dialogs、Divider、Text field Menus
+
+詳細實作 https://ithelp.ithome.com.tw/articles/10300163
+
+-----
 
