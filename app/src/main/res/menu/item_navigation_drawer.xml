@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/main_item"
+        android:title="Mail">
+
+        <menu>
+            <item
+                android:id="@+id/notification"
+                android:icon="@drawable/ic_notifications"
+                android:title="通知"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/privacySet"
+                android:icon="@drawable/ic_lock"
+                android:title="隱私設定"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/account"
+                android:icon="@drawable/ic_account"
+                android:title="用戶"
+                app:showAsAction="ifRoom"/>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/labels_item"
+        android:title="labels">
+        <menu>
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/ic_info"
+                android:title="關於" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_login"
+                android:title="登出"
+                app:showAsAction="ifRoom"/>
+        </menu>
+    </item>
+
+
+
+</menu>

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anna.mdcsubject.ui.adapter.CardRecyclerViewAdapter
 import com.anna.mdcsubject.CardsType
+import com.anna.mdcsubject.NavigationHost
 import com.anna.mdcsubject.R
 import com.anna.mdcsubject.databinding.FragmentProductCardsBinding
 import com.anna.mdcsubject.ui.bottomSheet.ModalBottomSheet
@@ -23,9 +24,9 @@ class ProductCardsFragment : Fragment() {
 
     private var _binding: FragmentProductCardsBinding? = null
     private val binding get() = _binding
+    private val menuItemClick = OnMenuItemClick()
     private val defaultDataList = arrayListOf(1, 2, 3, 4, 5, 6, 7, 8)
     private var favoriteDataList = arrayListOf<Int>()
-    private val menuItemClick = OnMenuItemClick()
 
 
     override fun onCreateView(
@@ -55,8 +56,11 @@ class ProductCardsFragment : Fragment() {
                     Toast.makeText(context, "開啟Bottom Sheet", Toast.LENGTH_LONG).show()
                     // 開啟Bottom Sheet
                     val modalBottomSheet = ModalBottomSheet()
-                    if(activity != null) {
-                        modalBottomSheet.show(requireActivity().supportFragmentManager, ModalBottomSheet.TAG)
+                    if (activity != null) {
+                        modalBottomSheet.show(
+                            requireActivity().supportFragmentManager,
+                            ModalBottomSheet.TAG
+                        )
                     }
                     true
                 }
@@ -65,7 +69,39 @@ class ProductCardsFragment : Fragment() {
         }
 
         binding?.topAppBar?.setNavigationOnClickListener {
-            Toast.makeText(context, "測試Navigation", Toast.LENGTH_LONG).show()
+            // 新增 Navigation drawer
+            binding?.drawerLayout?.open()
+        }
+
+        binding?.navigationView?.setNavigationItemSelectedListener { menuItem ->
+            // menu點處理選定
+            when (menuItem.itemId) {
+                R.id.notification -> { //通知
+                    if (activity != null) {
+                        binding?.drawerLayout?.close()
+                        (activity as NavigationHost).navigateTo(NotificationSetFragment(), false)
+                    }
+                }
+                R.id.privacySet -> { // 隱私設定
+                    Toast.makeText(context, "隱私設定", Toast.LENGTH_SHORT).show()
+                }
+                R.id.account -> { // 用戶
+                    // 使用者資料點擊開啟Full-screen dialogs
+                    if (activity != null) {
+                        binding?.drawerLayout?.close()
+                        requireActivity().supportFragmentManager.let {
+                            FullScreenDialogFragment().show(it, "")
+                        }
+                    }
+                }
+                R.id.about -> { // 關於
+                    Toast.makeText(context, "關於", Toast.LENGTH_SHORT).show()
+                }
+                R.id.logout -> { // 登出
+                    Toast.makeText(context, "登出", Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
         }
     }
 
@@ -95,7 +131,11 @@ class ProductCardsFragment : Fragment() {
         }
     }
 
-    private fun setRecycleViewLayout(dataList: List<Int>, type: CardsType, isFavorite: Boolean? = false) {
+    private fun setRecycleViewLayout(
+        dataList: List<Int>,
+        type: CardsType,
+        isFavorite: Boolean? = false
+    ) {
         binding?.recyclerView?.adapter = CardRecyclerViewAdapter(
             dataList,
             favoriteDataList,
@@ -114,20 +154,21 @@ class ProductCardsFragment : Fragment() {
 
     private fun setOnItemClickListener(): ((position: Int, isFavorite: Boolean?) -> Unit) {
         return { position, isFavorite ->
-            Toast.makeText(context, "點擊第幾項目 : ${position+1}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "點擊第幾項目 : ${position + 1}", Toast.LENGTH_SHORT).show()
             if (isFavorite != null && isFavorite == true) {
                 // 收藏卡片
-                favoriteDataList.add(position+1)
-            } else if (isFavorite != null && isFavorite == false){
-                favoriteDataList.remove(position+1)
+                favoriteDataList.add(position + 1)
+            } else if (isFavorite != null && isFavorite == false) {
+                favoriteDataList.remove(position + 1)
             }
         }
     }
 
-    private inner class OnMenuItemClick : androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
+    private inner class OnMenuItemClick :
+        androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
         override fun onMenuItemClick(item: MenuItem?): Boolean {
             return when (item?.itemId) {
-                R.id.mainPage -> {
+                R.id.mainPage -> { // 首頁
                     binding?.toggleButton?.visibility = View.VISIBLE
                     if (isCheckGridView()) {
                         setRecycleViewLayout(defaultDataList, CardsType.GRID)
@@ -136,7 +177,7 @@ class ProductCardsFragment : Fragment() {
                     }
                     true
                 }
-                R.id.collect -> {
+                R.id.collect -> { // 收藏
                     if (favoriteDataList.size != 0) {
                         binding?.toggleButton?.visibility = View.GONE
 
@@ -152,9 +193,9 @@ class ProductCardsFragment : Fragment() {
                         false
                     }
                 }
-                R.id.account -> {
+                R.id.account -> { // 用戶
                     // 使用者資料點擊開啟Full-screen dialogs
-                    if(activity != null) {
+                    if (activity != null) {
                         requireActivity().supportFragmentManager.let {
                             FullScreenDialogFragment().show(it, "")
                         }
@@ -168,7 +209,7 @@ class ProductCardsFragment : Fragment() {
 
     // 判斷toggleButton目前切換的卡片類型
     private fun isCheckGridView(): Boolean {
-       return binding?.toggleButton?.checkedButtonId == R.id.btn_grid
+        return binding?.toggleButton?.checkedButtonId == R.id.btn_grid
     }
 
     override fun onDestroyView() {
