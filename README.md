@@ -39,7 +39,7 @@
 
 
 
-## 伍. Day19 延續前實戰新增Material Design Component
+## 伍. Day19 延續前實戰Bottom Sheets、Full-screen dialogs實作
 實現Day15~Day18文章介紹MDC Components的 Bottom sheets、Dialogs、Divider、Menus的實作
 ### 使用 MDC Android Components
 - Add Bottom Sheets、Divider
