@@ -1,7 +1,6 @@
 package com.anna.mdcsubject.ui.fragment
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.EditText
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.anna.mdcsubject.LoginVerify
 import com.anna.mdcsubject.NavigationHost
 import com.anna.mdcsubject.R
 import com.anna.mdcsubject.databinding.FragmentLoginBinding
@@ -28,6 +28,7 @@ class LoginFragment : Fragment() {
     private var usernameInputText: TextInputLayout? = null
     private var passwordEditText: TextInputEditText? = null
     private var passwordInputText: TextInputLayout? = null
+    private val verifty by lazy { LoginVerify() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,22 +73,25 @@ class LoginFragment : Fragment() {
 
 
     private fun inputTextValid() {
+        val userName = usernameEditText?.text.toString()
+        val password = passwordEditText?.text.toString()
 
         btnLogin?.setOnClickListener {
-            if (isUserNameValid(usernameEditText?.text) && isPasswordValid(passwordEditText?.text)) {
+            if (verifty.isUserNameValid(userName)
+                && verifty.isPasswordValid(password)) {
                 // 都有輸入
                 (activity as NavigationHost).navigateTo(ProductCardsFragment(), false)
             } else {
                 when {
-                    isUserNameValid(usernameEditText?.text) -> {
+                    verifty.isUserNameValid(userName) -> {
                         // 只有輸入UserName
                         passwordInputText?.error = "請輸入長度8碼的密碼"
                     }
-                    isPasswordValid(passwordEditText?.text) -> {
+                    verifty.isPasswordValid(password) -> {
                         // 只有輸入Password
                         usernameInputText?.error = "請輸入最少一個字的名字"
                     }
-                    else -> {
+                    verifty.isUserNameAndPasswordValid(userName, password) -> {
                         // 都沒有輸入
                         usernameInputText?.error = "請輸入最少一個字的名字"
                         passwordInputText?.error = "請輸入長度8碼的密碼"
@@ -137,16 +141,6 @@ class LoginFragment : Fragment() {
                 AppCompatResources.getDrawable(it, R.mipmap.icon_closed_eye)
             }
         }
-
-    }
-
-
-    private fun isPasswordValid(text: Editable?): Boolean {
-        return text != null && text.length >= 8
-    }
-
-    private fun isUserNameValid(text: Editable?): Boolean {
-        return text != null && text.isNotEmpty()
     }
 
     override fun onDestroyView() {
