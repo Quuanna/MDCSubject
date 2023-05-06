@@ -49,13 +49,13 @@ class LoginFragment : Fragment() {
         super.onResume()
 
         usernameEditText?.doOnTextChanged { text, _, _, _ ->
-            if (text != null && text.isNotEmpty()) {
+            if (!text.isNullOrEmpty()) {
                 usernameInputText?.error = null
             }
         }
 
         passwordEditText?.doOnTextChanged { text, _, _, _ ->
-            if (text != null && text.length >= 8) {
+            if (mVerify.checkLength(text.toString())) {
                 passwordInputText?.error = null
             }
         }
@@ -70,18 +70,18 @@ class LoginFragment : Fragment() {
     }
 
     private fun inputTextValid() {
-        val userName = usernameEditText?.text.toString()
-        val password = passwordEditText?.text.toString()
+        val userName = usernameEditText?.text
+        val password = passwordEditText?.text
 
         btnLogin?.setOnClickListener {
-            mVerify.checkLoginResult(userName, password, object : LoginVerifyManager.VerifyListener{
+            mVerify.checkLoginResult(userName.toString(), password.toString(), object : LoginVerifyManager.VerifyListener{
                 override fun success() {
                     (activity as NavigationHost).navigateTo(ProductCardsFragment(), false)
                 }
 
                 override fun fail() {
-                    usernameInputText?.error = mVerify.checkEnterNameState(name = userName)
-                    passwordInputText?.error = mVerify.checkEnterPasswordState(password = password)
+                    usernameInputText?.error = mVerify.checkEnterNameState(name = userName.toString())
+                    passwordInputText?.error = mVerify.checkEnterPasswordState(password = password.toString())
                 }
             })
         }
