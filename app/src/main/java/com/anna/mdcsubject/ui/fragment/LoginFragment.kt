@@ -10,7 +10,7 @@ import android.widget.EditText
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import com.anna.mdcsubject.LoginVerify
+import com.anna.mdcsubject.LoginVerifyManager
 import com.anna.mdcsubject.NavigationHost
 import com.anna.mdcsubject.R
 import com.anna.mdcsubject.databinding.FragmentLoginBinding
@@ -18,8 +18,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class LoginFragment : Fragment() {
-
-    // This property is only valid between onCreateView and onDestroyView.
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding
 
@@ -28,7 +26,7 @@ class LoginFragment : Fragment() {
     private var usernameInputText: TextInputLayout? = null
     private var passwordEditText: TextInputEditText? = null
     private var passwordInputText: TextInputLayout? = null
-    private val verifty by lazy { LoginVerify() }
+    private val mVerify by lazy { LoginVerifyManager() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +55,7 @@ class LoginFragment : Fragment() {
         }
 
         passwordEditText?.doOnTextChanged { text, _, _, _ ->
-            if ( text != null && text.length >= 8) {
+            if (text != null && text.length >= 8) {
                 passwordInputText?.error = null
             }
         }
@@ -71,43 +69,25 @@ class LoginFragment : Fragment() {
         passwordInputText = binding?.passwordInputText
     }
 
-
     private fun inputTextValid() {
         val userName = usernameEditText?.text.toString()
         val password = passwordEditText?.text.toString()
 
         btnLogin?.setOnClickListener {
-            if (verifty.isUserNameValid(userName)
-                && verifty.isPasswordValid(password)) {
-                // 都有輸入
-                (activity as NavigationHost).navigateTo(ProductCardsFragment(), false)
-            } else {
-                when {
-                    verifty.isUserNameValid(userName) -> {
-                        // 只有輸入UserName
-                        passwordInputText?.error = "請輸入長度8碼的密碼"
-                    }
-                    verifty.isPasswordValid(password) -> {
-                        // 只有輸入Password
-                        usernameInputText?.error = "請輸入最少一個字的名字"
-                    }
-                    verifty.isUserNameAndPasswordValid(userName, password) -> {
-                        // 都沒有輸入
-                        usernameInputText?.error = "請輸入最少一個字的名字"
-                        passwordInputText?.error = "請輸入長度8碼的密碼"
-                    }
+            mVerify.checkLoginResult(userName, password, object : LoginVerifyManager.VerifyListener{
+                override fun success() {
+                    (activity as NavigationHost).navigateTo(ProductCardsFragment(), false)
                 }
-            }
+
+                override fun fail() {
+                    usernameInputText?.error = mVerify.checkEnterNameState(name = userName)
+                    passwordInputText?.error = mVerify.checkEnterPasswordState(password = password)
+                }
+            })
         }
     }
 
     private fun passwordEyeVisibility() {
-//        val editText = passwordInputText?.editText
-
-//        // 預設顯示密碼明文
-//        editText?.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-//        passwordInputText?.endIconDrawable = context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_open_eye) }
-
         passwordInputText?.setEndIconOnClickListener {
 
             // 檢查是否有 PasswordTransformationMethod 密碼轉換方法
